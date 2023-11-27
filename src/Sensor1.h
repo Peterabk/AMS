@@ -1,10 +1,10 @@
-#ifndef SENSOR_H_
-#define SENSOR_H_
+#ifndef SENSOR1_H_
+#define SENSOR1_H_
 
 #include "cTimer.h"
 #include <iostream>
 
-class Sensor {
+class Sensor1 {
 private:
     pthread_mutex_t mutex;
     int period_sec;  // seconds
@@ -22,8 +22,8 @@ public:
     void initialize_sensor();
     void sensorpoll();
 
-    Sensor(int period_sec, int period_msec, int upper_bound);
-    ~Sensor();
+    Sensor1(int period_sec, int period_msec, int upper_bound);
+    ~Sensor1();
 
     float generate_random();
 
