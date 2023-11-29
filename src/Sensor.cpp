@@ -35,7 +35,7 @@ void Sensor::sensorpoll() {
 
 
         // Print the sensor reading
-        std::cout << "The Sensor Pressure  did this: " << current_reading << " at the location\n";
+    //    std::cout << "The Sensor Pressure  did this: " << current_reading << " at the location\n";
 
         set_last_reading(last_reading);
         timer.waitTimer();

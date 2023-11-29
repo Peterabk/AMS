@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
    Sensor2 Fuel(writer_period_sec, writer_period_msec, 20);
 
     // Initialize Dial
-    Dial dial(&Pressure,&Temperature,&Fuel);
+    Dial dial(writer_period_sec, writer_period_msec,&Pressure,&Temperature,&Fuel);
 
 
     // Start Dial thread

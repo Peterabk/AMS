@@ -20,7 +20,7 @@ public:
     static const float Safe_Value_Temperature;
     static const float Safe_Value_Fuel;
 
-    Dial(Sensor* pressureSensor, Sensor1 *temperatureSensor, Sensor2 *fuelSensor);
+    Dial(int period_sec, int period_msec,Sensor* pressureSensor, Sensor1 *temperatureSensor, Sensor2 *fuelSensor);
 
 
     static void* start_routine(void* arg);

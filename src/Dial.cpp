@@ -5,10 +5,12 @@
 #define Safe_Value_Temperature float(30)
 #define Safe_Value_Fuel float(100)
 
-Dial::Dial(Sensor* pressureSensor, Sensor1 *temperatureSensor, Sensor2 *fuelSensor) {
+Dial::Dial(int period_sec, int period_msec,Sensor* pressureSensor, Sensor1 *temperatureSensor, Sensor2 *fuelSensor) {
     this->pressureSensor = pressureSensor;
   this->temperatureSensor = temperatureSensor;
   this->fuelSensor = fuelSensor;
+  this->period_sec = period_sec;
+     this->period_msec = period_msec;
     initialize_dial();
 }
 
@@ -65,24 +67,23 @@ void Dial::monitor_sensors() {
 
         // Trigger warning for each individual sensor if consecutiveOutOfRange reaches the threshold
         if (consecutiveOutOfRangePressure >= 3) {
-            std::cout << "Warning: Three consecutive  readings out of range For Pressure!" << std::endl;
+            std::cout << "LAMP for PRESSURE: RED " << std::endl;
             // Reset after triggering the warning
             consecutiveOutOfRangePressure = 0;}
+        else { std::cout << "LAMP for PRESSURE: GREEN " << std::endl;}
       //     	usleep(1000000);
         if (consecutiveOutOfRangeTemperature >= 3) {
-                   std::cout << "Warning: Three consecutive temperature readings out of range!" << std::endl;
-                   // Reset after triggering the warning
-                   consecutiveOutOfRangeTemperature = 0;
-               }
-    //      	usleep(1000000);
+        	std::cout << "LAMP for Temperature: RED " << std::endl;
+        	            // Reset after triggering the warning
+        	            consecutiveOutOfRangePressure = 0;}
+        	        else { std::cout << "LAMP for Temperature: GREEN " << std::endl;}
+      timer1.waitTimer();
         if (consecutiveOutOfRangeFuel >= 3) {
            // std::cout << "Warning: Three consecutive fuel readings out of range!" << std::endl;
             // Reset after triggering the warning
             consecutiveOutOfRangeFuel = 0;}
 
-      	usleep(1000000);
-        // Sleep for a while before the next iteration
- //	timer1.waitTimer(); // Sleep for 500 milliseconds (adjust as needed)
+        timer1.waitTimer();
     }
 }
 
