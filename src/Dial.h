@@ -19,7 +19,8 @@ public:
     static const float Safe_Value_Pressure;
     static const float Safe_Value_Temperature;
     static const float Safe_Value_Fuel;
-
+    void update_fuel_sensor(float reading);
+        void switch_lamp_color();
     Dial(int period_sec, int period_msec,Sensor* pressureSensor, Sensor1 *temperatureSensor, Sensor2 *fuelSensor);
 
 

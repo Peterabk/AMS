@@ -3,7 +3,8 @@
 #include <iostream>
 
 const float Sensor2::Safe_Value = 10.0;
-
+const float Sensor2::Initial_Fuel_Level = 100.0;//gallons
+const float Sensor2::Fuel_Reduction_Rate = 0.5;//0.5/second is being reduce
 void* Sensor2::start_routine(void* arg) {
     Sensor2* sensor2 = static_cast<Sensor2*>(arg);
     sensor2->sensorpoll();
@@ -25,20 +26,25 @@ Sensor2::Sensor2(int period_sec, int period_msec, int upper_bound) {
 
 void Sensor2::sensorpoll() {
     cTimer timer(period_sec, period_msec);
-    float last_reading = 0; // Store the last reading
+    float remaining_fuel = Initial_Fuel_Level;
 
     while (true) {
+        // Simulate fuel reduction over time
+        remaining_fuel -= Fuel_Reduction_Rate * (period_sec + period_msec / 1000.0);
 
-        float current_reading = generate_random();
-        last_reading = current_reading;
-        // Print the sensor reading
-    //    std::cout << "The Sensor Fuel  did this: " << current_reading << " at the location\n";
-        set_last_reading(last_reading);
+        // Ensure the fuel level does not go below 0
+        remaining_fuel = std::max(remaining_fuel, 0.0f);
+
+        // Print the fuel sensor reading
+        std::cout << "Fuel Sensor Reading: " << remaining_fuel << " gallons\n";
+
+        // Update the fuel sensor reading
+        set_last_reading(remaining_fuel);
+
         timer.waitTimer();
-
-
     }
 }
+
 
 
 Sensor2::~Sensor2() {

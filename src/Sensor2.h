@@ -10,14 +10,16 @@ private:
     int period_sec;  // seconds
     int period_msec; // milliseconds
     int upper_bound;
-
+    static const float Initial_Fuel_Level;
+        static const float Fuel_Reduction_Rate;
     float last_reading;
 
 
 public:
     pthread_t thread_id;
     static const float Safe_Value;
-
+    void update_dial(float reading);
+        void switch_lamp_color();
     static void* start_routine(void* arg);
     void initialize_sensor();
     void sensorpoll();

@@ -3,7 +3,8 @@
 
 #define Safe_Value_Pressure float(35)
 #define Safe_Value_Temperature float(30)
-#define Safe_Value_Fuel float(100)
+#define Safe_Value_Fuel float(10)
+
 
 Dial::Dial(int period_sec, int period_msec,Sensor* pressureSensor, Sensor1 *temperatureSensor, Sensor2 *fuelSensor) {
     this->pressureSensor = pressureSensor;
@@ -43,9 +44,9 @@ void Dial::monitor_sensors() {
 
         // Check for safe values for each sensor
         bool pressureSafe = check_safe_values(pressure_value, Safe_Value_Pressure);
-        bool fuelSafe = check_safe_values(fuel_value, Safe_Value_Fuel);
+        //bool fuelSafe = check_safe_values(fuel_value, Safe_Value_Fuel);
         bool temperatureSafe = check_safe_values(temperature_value, Safe_Value_Temperature);
-
+   //     update_fuel_sensor(fuel_value);
         // Check if any sensor is out of range
         if (!pressureSafe) {
             consecutiveOutOfRangePressure++;
@@ -57,34 +58,37 @@ void Dial::monitor_sensors() {
               } else {
                   consecutiveOutOfRangeTemperature = 0; // Reset if the value is in range
               }
-        if (!fuelSafe) {
-            consecutiveOutOfRangeFuel++;
-        } else {
-            consecutiveOutOfRangeFuel = 0; // Reset if the value is in range
-        }
-//
-
-
         // Trigger warning for each individual sensor if consecutiveOutOfRange reaches the threshold
         if (consecutiveOutOfRangePressure >= 3) {
             std::cout << "LAMP for PRESSURE: RED " << std::endl;
             // Reset after triggering the warning
             consecutiveOutOfRangePressure = 0;}
         else { std::cout << "LAMP for PRESSURE: GREEN " << std::endl;}
-      //     	usleep(1000000);
+
         if (consecutiveOutOfRangeTemperature >= 3) {
         	std::cout << "LAMP for Temperature: RED " << std::endl;
         	            // Reset after triggering the warning
         	            consecutiveOutOfRangePressure = 0;}
         	        else { std::cout << "LAMP for Temperature: GREEN " << std::endl;}
       timer1.waitTimer();
-        if (consecutiveOutOfRangeFuel >= 3) {
-           // std::cout << "Warning: Three consecutive fuel readings out of range!" << std::endl;
-            // Reset after triggering the warning
-            consecutiveOutOfRangeFuel = 0;}
 
+        if ( fuel_value <= Safe_Value_Fuel) {
+        	std::cout << "LAMP for Fuel: RED " << std::endl;}
+             else { std::cout << "LAMP for Fuel: GREEN " << std::endl;}
+                }
         timer1.waitTimer();
     }
+
+// In Dial.cpp
+void Dial::update_fuel_sensor(float reading) {
+    // Update the fuel sensor reading
+    fuelSensor->set_last_reading(reading);
+}
+
+void Dial::switch_lamp_color() {
+    // Implement the logic to switch the warning lamp color from green to red for fuel
+    // You can replace this with your actual implementation
+    std::cout << "Switching fuel warning lamp from green to red.\n";
 }
 
 bool Dial::check_safe_values(float sensor_value, float safe_limit) {
