@@ -15,16 +15,21 @@
 
 class Sensor {
 	pthread_mutex_t mutex;
+	std::string th_name;
 	int period_sec; //seconds
 	int period_msec;//milliseconds
 	int upper_bound;
 	friend void * start_routine(void* arg, float random);
 
+	const char *name = "/my_shm";
+
+	int shm_fd;
+
 	void *ptr;
 
 public:
 	pthread_t thread_id;
-	Sensor(int period_sec,int period_msec,int upper_bound);
+	Sensor(std::string name,int period_sec,int period_msec,int upper_bound);
 	~Sensor();
 	void initialize_sensor();
 	void sensorpoll(Sensor sensor);

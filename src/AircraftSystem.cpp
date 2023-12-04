@@ -15,12 +15,15 @@ int main(int argc, char *argv[]) {
 	// Init Writer
 	int writer_period_sec=1;
 	int writer_period_msec=0;
-	Sensor Pressure(writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure);
-	Sensor Temperature(writer_period_sec,writer_period_msec,Max_Ran_Value_Temperature);
+	//std::string name = "Pressure";
+	Sensor Pressure("Pressure",writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure);
+	Sensor Temperature("Temperature",writer_period_sec,writer_period_msec,Max_Ran_Value_Temperature);
+	Sensor Fuel("Fuel",writer_period_sec,writer_period_msec,Max_Ran_Value_Pressure);
 
 
 
 	pthread_join(Pressure.thread_id,NULL);
 	pthread_join(Temperature.thread_id,NULL);
+	pthread_join(Fuel.thread_id,NULL);
 	return EXIT_SUCCESS;
 }
