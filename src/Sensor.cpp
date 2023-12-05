@@ -52,15 +52,14 @@ void Sensor::initialize_sensor(){
 void Sensor::sensorpoll(Sensor sensor){
 
 	cTimer timer(period_sec,period_msec);
-	int n = 0;
 
-	int *iptr=(int*)ptr;
-	memset (iptr, 0, sizeof(int));
+	float *iptr=(float*)ptr;
+	memset (iptr, 0, sizeof(float));
 
 	while(true){
 
 		pthread_mutex_lock(&mutex);
-		*iptr = 10;
+		*iptr = sensor.generate_random();
 		printf("The %s Sensor did this : %f at the location %p \n",sensor.th_name, float(*iptr), iptr );
 		pthread_mutex_unlock(&mutex);
 
