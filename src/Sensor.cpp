@@ -3,12 +3,13 @@
 #include <cstdlib>
 
 
-Sensor::Sensor(std::string name, int period_sec, int period_msec, int upper_bound) {
+Sensor::Sensor(std::string name, int period_sec, int period_msec, int upper_bound, int offset) {
 
 	this->period_sec=period_sec;
 	this->period_msec=period_msec;
 	this->upper_bound = upper_bound;
 	this->th_name = name;
+	this->map_offset = offset;
 	initialize_sensor();
 
 	//printf("here");
@@ -34,7 +35,7 @@ void Sensor::initialize_sensor(){
 	ftruncate(shm_fd, SIZE);
 
 	// now map the shared memory segment in the address space of the process
-	ptr = mmap(0,SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+	ptr = mmap(0,SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, map_offset);
 	if (ptr == MAP_FAILED) {
 		printf("Map failed\n");
 	}
@@ -52,15 +53,14 @@ void Sensor::initialize_sensor(){
 void Sensor::sensorpoll(Sensor sensor){
 
 	cTimer timer(period_sec,period_msec);
-	int n = 0;
 
-	int *iptr=(int*)ptr;
-	memset (iptr, 0, sizeof(int));
+	float *iptr=(float*)ptr;
+	memset (iptr, 0, sizeof(float));
 
 	while(true){
 
 		pthread_mutex_lock(&mutex);
-		*iptr = 10;
+		*iptr = sensor.generate_random();
 		printf("The %s Sensor did this : %f at the location %p \n",sensor.th_name, float(*iptr), iptr );
 		pthread_mutex_unlock(&mutex);
 
