@@ -2,12 +2,13 @@
 #include "Dial.h"
 
 
-Dial::Dial(std::string name, int period_sec, int period_msec, float Safe_Value) {
+Dial::Dial(std::string name, int period_sec, int period_msec, float Safe_Value, int offset) {
 
 	this->period_sec=period_sec;
 	this->period_msec=period_msec;
 	this->Dial_name = name;
 	this->safe_value = Safe_Value;
+	this->map_offset = offset;
 	//this->name = name;
 	initialize_reader();
 
@@ -31,7 +32,7 @@ void Dial::initialize_reader(){
 	}
 
 	/* now map the shared memory segment in the address space of the process */
-	ptr = mmap(0,SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+	ptr = mmap(0,SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, map_offset);
 	if (ptr == MAP_FAILED) {
 		perror("in mmap()");
 		exit(1);

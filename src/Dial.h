@@ -25,6 +25,7 @@ class Dial {
 	int period_sec; //seconds
 	int period_msec;//milliseconds
 	float safe_value;
+	int map_offset;
 	std::string Dial_name;
 
 	std::queue<float> ofr_value;
@@ -44,7 +45,7 @@ public:
 	pthread_t thread_id;
 	struct Lamp lamp;
 	void * threadTask(void * );
-	Dial(std::string name,int period_sec,int period_msec, float Safe_Value);
+	Dial(std::string name,int period_sec,int period_msec, float Safe_Value, int offset);
 	~Dial();
 	void initialize_reader();
 	void manage_ofr_queue(float* ptr_value, std::string dialname);

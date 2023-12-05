@@ -17,16 +17,18 @@ int main(int argc, char *argv[]) {
 	// Init Writer
 	int writer_period_sec=1;
 	int writer_period_msec=0;
+	int offset1 = 4;
+	int offset2 = 8;
 
 	//maybe the sensor should call the Dial from whithin the Sensor class, idk if it's better or not
-	Sensor Pressure("Pressure",writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure);
-	Dial Pressure_dial("Pressure",writer_period_sec,writer_period_msec,Safe_Value_Pressure );
+	Sensor Pressure("Pressure",writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure,0);
+	Dial Pressure_dial("Pressure",writer_period_sec,writer_period_msec,Safe_Value_Pressure,0);
 
-	Sensor Temperature("Temperature",writer_period_sec,writer_period_msec,Max_Ran_Value_Temperature);
-	Dial Temperature_dial("Temperature",writer_period_sec,writer_period_msec,Safe_Value_Temperature);
+	Sensor Temperature("Temperature",writer_period_sec,writer_period_msec,Max_Ran_Value_Temperature,offset1);
+	Dial Temperature_dial("Temperature",writer_period_sec,writer_period_msec,Safe_Value_Temperature,offset1);
 
-	Sensor Fuel("Fuel",writer_period_sec,writer_period_msec,Max_Ran_Value_Pressure);
-	Dial Fuel_dial("Fuel",writer_period_sec,writer_period_msec,Safe_Value_Fuel);
+	Sensor Fuel("Fuel",writer_period_sec,writer_period_msec,Max_Ran_Value_Pressure,offset2);
+	Dial Fuel_dial("Fuel",writer_period_sec,writer_period_msec,Safe_Value_Fuel,offset2);
 
 
 
