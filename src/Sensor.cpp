@@ -56,12 +56,14 @@ void Sensor::sensorpoll(Sensor sensor){
 
 	float *iptr=(float*)ptr;
 	memset (iptr, 0, sizeof(float));
-
 	while(true){
 
 		pthread_mutex_lock(&mutex);
+		if(th_name=="Fuel"){
 		*iptr = sensor.generate_random();
-		printf("The %s Sensor did this : %f at the location %p \n",sensor.th_name, float(*iptr), iptr );
+		}
+		else if (th_name=="Pressure"||th_name=="Temperature"){
+			*iptr = sensor.generate_random1();}
 		pthread_mutex_unlock(&mutex);
 
 		timer.waitTimer();
@@ -74,9 +76,38 @@ Sensor::~Sensor(){
 	thread_id == NULL;
 }
 
-float Sensor::generate_random(){
-	return rand() % upper_bound;
+float Sensor::generate_random() {
+    static float fuelLevel = 40.0; // Gallons, starts at 100
+    static auto lastTime = std::chrono::steady_clock::now();
+
+    // Only modify the fuel level for the Fuel sensor
+    if (th_name == "Fuel") {
+        auto currentTime = std::chrono::steady_clock::now();
+        std::chrono::duration<float> elapsed = currentTime - lastTime;
+
+        // Convert elapsed time to seconds and decrease fuel
+        float decreaseAmount = 5.0 * elapsed.count(); // 5 liters per second
+        fuelLevel -= decreaseAmount / 3.78541; // Convert liters to gallons (1 gallon = 3.78541 liters)
+
+        // Update the last time
+        lastTime = currentTime;
+
+        // Prevent fuel level from going negative
+        if (fuelLevel < 0) {
+            fuelLevel = 0;
+        }
+    }
+
+    return fuelLevel;
 }
+float Sensor::generate_random1() {
+    return rand() % upper_bound;;
+}
+
+
+
+
+
 
 //we need to add a function that will compare the sensor reading to the safe sensor reading
 //each time the sensor is being read

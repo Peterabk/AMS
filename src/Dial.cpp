@@ -1,8 +1,9 @@
 
 #include "Dial.h"
+#include "CRT.h"
 
-
-Dial::Dial(std::string name, int period_sec, int period_msec, float Safe_Value, int offset) {
+Dial::Dial(std::string name, int period_sec, int period_msec, float Safe_Value, int offset, CRT* crt)
+    : crtDisplay(crt) {
 
 	this->period_sec=period_sec;
 	this->period_msec=period_msec;
@@ -68,7 +69,7 @@ void Dial::read(Dial dial){
 		/* now read from the shared memory region */
 		pthread_mutex_lock(&mutex);
 
-		printf("The reader %s read %f from the location %p \n", dial.Dial_name ,*(iptr), iptr);
+		//printf("The reader %s read %f from the location %p \n", dial.Dial_name ,*(iptr), iptr);
 		manage_ofr_queue(iptr,dial.Dial_name);
 		*iptr = 0;
 		printf("\n");
@@ -80,23 +81,64 @@ void Dial::read(Dial dial){
 	/* remove the shared memory segment */
 
 }
+std::string Dial::getLampStatus()  {
+    return lamp.Lamp_status; // Assuming `lamp` is a member of `Dial` and `Lamp_status` is a member of `lamp`.
+}
+
+
 
 void Dial::manage_ofr_queue(float* ptr_value, std::string dialname){
-	//if the read value is bigger than the safe value then put it in the queue
-	if(*ptr_value > safe_value && lamp.Lamp_status == "GREEN" ){
-		ofr_value.push(*ptr_value);
-		if(is_queue_ofr()){
-			lamp.Lamp_status = "RED";
-			printf("The Engine-%s Lamp is %s \n", dialname ,lamp.Lamp_status);
-		}
-	}
-	//if the queue is not empty and the value is in the safe zone then delete the whole queue
-	else if(!ofr_value.empty() && (*ptr_value < safe_value)){
-		while(!ofr_value.empty()){
-			ofr_value.pop();
-		}
-	}
+    bool statusChanged = false;
+    bool statusWarning = false;
+    if(Dial_name=="Pressure"||Dial_name=="Temperature"){
+    	if(*ptr_value > safe_value && lamp.Lamp_status == "GREEN" ){
+    		ofr_value.push(*ptr_value);
+    		if(is_queue_ofr()){
+    			lamp.Lamp_status = "RED";
+    			statusChanged = true;
+    			 statusWarning = true;
+    			printf("The Engine-%s Lamp is %s \n", dialname ,lamp.Lamp_status);
+    		}
+    	}
+    	//if the queue is not empty and the value is in the safe zone then delete the whole queue
+    	else if(!ofr_value.empty() && (*ptr_value < safe_value)){
+    		while(!ofr_value.empty()){
+    			ofr_value.pop();
+    			statusChanged = true;
+    			 statusWarning = true;
+    		}
+    	}
+    }
+    if(Dial_name=="Fuel"){
+    // If the read value is lower than the safe value then change status to RED
+    if(*ptr_value <= safe_value && lamp.Lamp_status == "GREEN"){
+        printf("The Engine-%s Lamp is RED\n", dialname);
+        lamp.Lamp_status = "RED";
+        statusChanged = true;
+        statusWarning = true;
+    }
+    // If the value is back in the safe zone and the lamp is RED, change it to GREEN
+    else if(*ptr_value >= safe_value && lamp.Lamp_status == "RED"){
+        printf("The Engine-%s Lamp is GREEN\n", dialname);
+        lamp.Lamp_status = "GREEN";
+        statusChanged = true;
+        statusWarning = true;
+    }}
+    // Update CRT display if there's a change in status
+    if(statusChanged && crtDisplay != nullptr){
+        crtDisplay->updateLampStatus(dialname, lamp.Lamp_status);
+    }
+    // warning crt
+    if(statusChanged && crtDisplay != nullptr){
+           crtDisplay->updateWarningStatus(dialname,statusWarning );
+       }
+    //dials value
+    if(crtDisplay != nullptr){
+          crtDisplay->updateDialStatus(dialname, *ptr_value);
+      }
+
 }
+
 
 bool Dial::is_queue_ofr(){
 	if(ofr_value.size() > 2){
