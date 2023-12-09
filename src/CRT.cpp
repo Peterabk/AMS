@@ -29,6 +29,7 @@ void CRT::displayInterface(int period_sec, int period_msec ) {
 	this->period_sec=period_sec;
 			this->period_msec=period_msec;
 	cTimer timer(period_sec,period_msec);
+	bool answer;
     // Display LAMPS with their statuses
 	while(true){
     std::cout << "================ LAMPS ================\n";
@@ -47,7 +48,8 @@ void CRT::displayInterface(int period_sec, int period_msec ) {
             std::cout << "WARNING CHECK :"<<lamp.first << "\n";
     	   }
         }
-    timer.waitTimer();
+  timer.waitTimer();
+
 	}
 
 }

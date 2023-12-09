@@ -88,28 +88,43 @@ std::string Dial::getLampStatus()  {
 
 
 void Dial::manage_ofr_queue(float* ptr_value, std::string dialname){
-    bool statusChanged = false;
-    bool statusWarning = false;
-    if(Dial_name=="Pressure"||Dial_name=="Temperature"){
-    	if(*ptr_value > safe_value && lamp.Lamp_status == "GREEN" ){
-    		ofr_value.push(*ptr_value);
-    		if(is_queue_ofr()){
-    			lamp.Lamp_status = "RED";
-    			statusChanged = true;
-    			 statusWarning = true;
-    			printf("The Engine-%s Lamp is %s \n", dialname ,lamp.Lamp_status);
-    		}
-    	}
-    	//if the queue is not empty and the value is in the safe zone then delete the whole queue
-    	else if(!ofr_value.empty() && (*ptr_value < safe_value)){
-    		while(!ofr_value.empty()){
-    			ofr_value.pop();
-    			statusChanged = true;
-    			 statusWarning = true;
-    		}
-    	}
-    }
-    if(Dial_name=="Fuel"){
+	static int overSafeValueCountPressure = 0;
+	    static int overSafeValueCountTemperature = 0;
+	    bool statusChanged = false;
+	    bool statusWarning = false;
+
+	    if(Dial_name == "Pressure") {
+	        if(*ptr_value < safe_value) {
+	            overSafeValueCountPressure++;
+	            if(overSafeValueCountPressure >= 3 && lamp.Lamp_status != "RED") {
+	                lamp.Lamp_status = "RED";
+	                statusChanged = true;
+	                statusWarning = true;
+	            }
+	        } else {
+	            if(lamp.Lamp_status == "RED") {
+	                lamp.Lamp_status = "GREEN";
+	                statusChanged = true;
+	            }
+	            overSafeValueCountPressure = 0;
+	        }
+	    } else if(Dial_name == "Temperature") {
+	        if(*ptr_value < safe_value) {
+	            overSafeValueCountTemperature++;
+	            if(overSafeValueCountTemperature >= 3 && lamp.Lamp_status != "RED") {
+	                lamp.Lamp_status = "RED";
+	                statusChanged = true;
+	                statusWarning = true;
+	            }
+	        } else {
+	            if(lamp.Lamp_status == "RED") {
+	                lamp.Lamp_status = "GREEN";
+	                statusChanged = true;
+	            }
+	            overSafeValueCountTemperature = 0;
+	        }
+	    }
+	    else if(Dial_name=="Fuel"){
     // If the read value is lower than the safe value then change status to RED
     if(*ptr_value <= safe_value && lamp.Lamp_status == "GREEN"){
         printf("The Engine-%s Lamp is RED\n", dialname);
