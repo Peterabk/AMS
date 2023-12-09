@@ -35,6 +35,7 @@ public:
 	void initialize_sensor();
 	void sensorpoll(Sensor sensor);
 	float generate_random();
+	float generate_random1();
 
 };
 
