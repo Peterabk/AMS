@@ -29,6 +29,7 @@ class cTimer {
 	uint64_t tick_cycles, tock_cycles;
 public:
 	cTimer(uint32_t,uint32_t);
+	sigevent sig_event_cust;
 
 	void setTimerSpec(uint32_t,uint32_t);
 	void waitTimer();

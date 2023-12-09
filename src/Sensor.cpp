@@ -11,7 +11,6 @@ Sensor::Sensor(std::string name, int period_sec, int period_msec, int upper_boun
 	this->th_name = name;
 	this->map_offset = offset;
 	initialize_sensor();
-
 	//printf("here");
 }
 
@@ -76,6 +75,12 @@ Sensor::~Sensor(){
 
 float Sensor::generate_random(){
 	return rand() % upper_bound;
+}
+
+void Sensor::sayhello(){
+	while(true){
+		std::cout<<"HELLO \n";
+	}
 }
 
 //we need to add a function that will compare the sensor reading to the safe sensor reading
