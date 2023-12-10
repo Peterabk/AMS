@@ -20,6 +20,7 @@ class Sensor {
 	int period_msec;//milliseconds
 	int upper_bound;
 	int map_offset;
+	bool *generallock;
 	friend void * start_routine(void* arg);
 
 	const char *name = "/my_shm";
@@ -30,11 +31,12 @@ class Sensor {
 
 public:
 	pthread_t thread_id;
-	Sensor(std::string name,int period_sec,int period_msec,int upper_bound, int offset);
+	Sensor(std::string name,int period_sec,int period_msec,int upper_bound, int offset, bool *lock);
 	~Sensor();
 	void initialize_sensor();
 	void sensorpoll(Sensor sensor);
 	float generate_random();
+	float generate_random1();
 	static void sayhello();
 
 };

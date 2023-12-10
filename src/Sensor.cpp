@@ -3,13 +3,14 @@
 #include <cstdlib>
 
 
-Sensor::Sensor(std::string name, int period_sec, int period_msec, int upper_bound, int offset) {
+Sensor::Sensor(std::string name, int period_sec, int period_msec, int upper_bound, int offset, bool *lock) {
 
 	this->period_sec=period_sec;
 	this->period_msec=period_msec;
 	this->upper_bound = upper_bound;
 	this->th_name = name;
 	this->map_offset = offset;
+	this->generallock = lock;
 	initialize_sensor();
 	//printf("here");
 }
@@ -55,7 +56,7 @@ void Sensor::sensorpoll(Sensor sensor){
 
 	float *iptr=(float*)ptr;
 	memset (iptr, 0, sizeof(float));
-	while(true){
+	while(!(*generallock)){
 
 		pthread_mutex_lock(&mutex);
 		if(th_name=="Fuel"){

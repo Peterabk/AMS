@@ -26,31 +26,31 @@ void CRT::updateWarningStatus(const std::string& dialName, bool warning) {
 }
 
 void CRT::displayInterface(int period_sec, int period_msec ) {
-	this->period_sec=period_sec;
-			this->period_msec=period_msec;
-	cTimer timer(period_sec,period_msec);
-	bool answer;
-    // Display LAMPS with their statuses
-	while(true){
-    std::cout << "================ LAMPS ================\n";
-    for (const auto& lamp : lampStatuses) {
-        std::cout << lamp.first << "-> " << lamp.second << "\n";
-
-    }
-    std::cout << "================ DIALS ================\n";
-       for (const auto& dial : dialStatusMap) {
-           std::cout << dial.first << "-> " << dial.second << "\n";
-
-       }
-       std::cout << "================ WARNING ================\n";
-       for (const auto& lamp : lampStatuses) {
-    	   if(lamp.second=="RED"){
-            std::cout << "WARNING CHECK :"<<lamp.first << "\n";
-    	   }
-        }
-  timer.waitTimer();
-
-	}
+//	this->period_sec=period_sec;
+//	this->period_msec=period_msec;
+//	cTimer timer(period_sec,period_msec);
+//	bool answer;
+//    // Display LAMPS with their statuses
+//	while(true){
+//    std::cout << "================ LAMPS ================\n";
+//    for (const auto& lamp : lampStatuses) {
+//        std::cout << lamp.first << "-> " << lamp.second << "\n";
+//
+//    }
+//    std::cout << "================ DIALS ================\n";
+//       for (const auto& dial : dialStatusMap) {
+//           std::cout << dial.first << "-> " << dial.second << "\n";
+//
+//       }
+//       std::cout << "================ WARNING ================\n";
+//       for (const auto& lamp : lampStatuses) {
+//    	   if(lamp.second=="RED"){
+//            std::cout << "WARNING CHECK :"<<lamp.first << "\n";
+//    	   }
+//        }
+//  timer.waitTimer();
+//
+//	}
 
 }
 

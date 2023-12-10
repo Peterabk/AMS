@@ -30,7 +30,7 @@ void Keyboard::handleFKeyPress() {
 }
 
 // Main Function - For demonstration purposes only
-int main() {
+/*int main() {
     Keyboard keyboard;
     keyboard.initialize();
     while(true) {
@@ -38,4 +38,4 @@ int main() {
         // Other logic of your main program
     }
     return 0;
-}
+}*/
