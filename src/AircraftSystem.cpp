@@ -5,7 +5,9 @@
 #include "Sensor.h"
 #include "Dial.h"
 #include "CRT.h"
-
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/select.h>
 #define Max_Ran_Value_Pressure int(100)
 #define Max_Ran_Value_Temperature int(50)
 #define Safe_Value_Pressure float(50)
@@ -21,6 +23,8 @@ int main(int argc, char *argv[]) {
 	int offset1 = 4;
 	int offset2 = 8;
 	CRT crtDisplay;
+	//Keyboard keyboard(&crtDisplay);
+
 	//maybe the sensor should call the Dial from whithin the Sensor class, idk if it's better or not
 	Sensor Pressure("Pressure",writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure,0);
 	Dial Pressure_dial("Pressure",writer_period_sec,writer_period_msec,Safe_Value_Pressure,0,&crtDisplay);
@@ -52,9 +56,6 @@ int main(int argc, char *argv[]) {
 
 	pthread_join(Fuel.thread_id,NULL);
 	pthread_join(Fuel_dial.thread_id,NULL);
-
-
-
 
 
 

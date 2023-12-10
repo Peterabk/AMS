@@ -34,6 +34,21 @@ public:
 
     // Function to check if there is an unacknowledged warning
     bool isWarningActive() const;
+
+
+
+
+
+    char getChar();
+     char getConfirmation();
+     void clearInputBuffer();
+
+     // Template function for string conversion
+     template <typename T>
+     std::string to_string(T value);
+
+
+
 };
 
 #endif // CRT_H
