@@ -20,7 +20,7 @@ class Sensor {
 	int period_msec;//milliseconds
 	int upper_bound;
 	int map_offset;
-	friend void * start_routine(void* arg, float random);
+	friend void * start_routine(void* arg);
 
 	const char *name = "/my_shm";
 
@@ -35,7 +35,7 @@ public:
 	void initialize_sensor();
 	void sensorpoll(Sensor sensor);
 	float generate_random();
-	float generate_random1();
+	static void sayhello();
 
 };
 
