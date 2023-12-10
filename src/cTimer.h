@@ -14,20 +14,23 @@
 #include <sys/syspage.h>
 #include <inttypes.h>
 #include <stdint.h>
+#include "SmokeDetector.h"
 
 class cTimer {
-	int channel_id;
+
 	int connection_id;
 
 	struct sigevent sig_event;
 	struct itimerspec timer_spec;
 	timer_t timer_id;
 
-	char msg_buffer[100];
+
 
 	uint64_t cycles_per_sec;
 	uint64_t tick_cycles, tock_cycles;
 public:
+	int channel_id;
+	char msg_buffer[100];
 	cTimer(uint32_t,uint32_t);
 	sigevent sig_event_cust;
 

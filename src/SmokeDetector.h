@@ -24,19 +24,22 @@ class SmokeDetector {
 	std::string th_name;
 	void *ptr;
 
-	pthread_mutex_t mutex;
+	pthread_mutex_t *mutex;
 	pthread_cond_t condit;
 
 	friend void * start_routine_smoke(void* arg);
 	struct sigevent sig_event;
-	static void signalHandler(union sigval sig);
+
+	void *smokeptr;
 
 public:
+	int done;
 	pthread_t thread_id;
 	void initialize_smokedetector();
-	void smokeInterrupt(SmokeDetector smoke);
+	void smokeInterrupt(SmokeDetector *smoke);
+	void signalHandler();
 
-	SmokeDetector(pthread_mutex_t,pthread_cond_t);
+	SmokeDetector(pthread_mutex_t*);
 
 	virtual ~SmokeDetector();
 };

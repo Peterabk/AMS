@@ -23,29 +23,37 @@ int main(int argc, char *argv[]) {
 	int offset1 = 4;
 	int offset2 = 8;
 
-	SmokeDetector smoke_one(mutex,condition);
+	SmokeDetector smoke_one(&mutex);
 
 	//maybe the sensor should call the Dial from whithin the Sensor class, idk if it's better or not
-	Sensor Pressure("Pressure",writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure,0);
-	Dial Pressure_dial("Pressure",writer_period_sec,writer_period_msec,Safe_Value_Pressure,0);
+	Sensor Pressure("Pressure",writer_period_sec,writer_period_msec, Max_Ran_Value_Pressure,0,&mutex);
+	//Dial Pressure_dial("Pressure",writer_period_sec,writer_period_msec,Safe_Value_Pressure,0);
 
-	Sensor Temperature("Temperature",writer_period_sec,writer_period_msec,Max_Ran_Value_Temperature,offset1);
-	Dial Temperature_dial("Temperature",writer_period_sec,writer_period_msec,Safe_Value_Temperature,offset1);
+	Sensor Temperature("Temperature",writer_period_sec,writer_period_msec,Max_Ran_Value_Temperature,offset1,&mutex);
+	//Dial Temperature_dial("Temperature",writer_period_sec,writer_period_msec,Safe_Value_Temperature,offset1);
 
-	Sensor Fuel("Fuel",writer_period_sec,writer_period_msec,Max_Ran_Value_Pressure,offset2);
-	Dial Fuel_dial("Fuel",writer_period_sec,writer_period_msec,Safe_Value_Fuel,offset2);
+	Sensor Fuel("Fuel",writer_period_sec,writer_period_msec,Max_Ran_Value_Pressure,offset2,&mutex);
+	//Dial Fuel_dial("Fuel",writer_period_sec,writer_period_msec,Safe_Value_Fuel,offset2);
+
+//	if (raise(SIGUSR1) != 0) {
+//	    perror("Error raising signal");
+//	    // Handle the error as appropriate
+//	}
 
 
-	pthread_join(smoke_one.thread_id,NULL);
+
+
 
 	pthread_join(Pressure.thread_id,NULL);
-	pthread_join(Pressure_dial.thread_id,NULL);
+	//pthread_join(Pressure_dial.thread_id,NULL);
 
 	pthread_join(Temperature.thread_id,NULL);
-	pthread_join(Temperature_dial.thread_id,NULL);
+	//pthread_join(Temperature_dial.thread_id,NULL);
 
 	pthread_join(Fuel.thread_id,NULL);
-	pthread_join(Fuel_dial.thread_id,NULL);
+	//pthread_join(Fuel_dial.thread_id,NULL);
+
+	pthread_join(smoke_one.thread_id,NULL);
 
 
 
